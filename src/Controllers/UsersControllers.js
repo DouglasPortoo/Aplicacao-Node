@@ -8,12 +8,19 @@ export const usersControllers = {
 
     try {
 
+      let checkEmailExists = await connection.select('email')
+        .fromRaw('(select * from "users" where "email" == ?)', email)
+
+      if (checkEmailExists.length > 0) {
+        throw new Error("Este e-mail já está em uso.")
+      }
+
       const hashPassword = await hash(password, 8)
 
       await connection("users").insert({
         name,
         email,
-        password : hashPassword
+        password: hashPassword
       })
 
       res.status(201).json({ name, email, hashPassword })
