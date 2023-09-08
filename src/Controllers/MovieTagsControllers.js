@@ -4,7 +4,7 @@ export const movieTagsControllers = {
 
   index: async (req, res) => {
 
-    const { user_id } = req.params
+    const  user_id  = req.user.id
 
     const tags = await connection("movie_tags").where({user_id}).groupBy("name")
 

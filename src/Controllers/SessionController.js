@@ -12,7 +12,7 @@ export const sessionController = {
 
     try {
       const user = await connection("users").where({ email }).first()
-      console.log( user)
+     
 
       if (!user) {
         throw new Error("email ou senha invalida")

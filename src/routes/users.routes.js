@@ -1,9 +1,12 @@
 import { Router } from "express";
 import { usersControllers } from "../Controllers/UsersControllers.js";
 
+import  {ensureAuth}  from "../middleware/ensureAuth.js";
+
 export const usersRouter = Router()
 
 usersRouter.post('/', usersControllers.create)
-usersRouter.put('/:user_id', usersControllers.update)
-usersRouter.delete('/:id', usersControllers.delete)
-usersRouter.get('/:user_id', usersControllers.show)
+usersRouter.put('/',ensureAuth, usersControllers.update)
+
+usersRouter.delete('/',ensureAuth, usersControllers.delete)
+usersRouter.get('/',ensureAuth, usersControllers.show)

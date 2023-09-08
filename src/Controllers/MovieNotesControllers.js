@@ -3,7 +3,7 @@ import { connection } from "../database/knex/index.js";
 export const movieNotesControllers = {
   create: async (req, res) => {
     const { title, description, rating, tags } = req.body
-    const { user_id } = req.params
+    const user_id  = req.user.id
 
     const [note_id] = await connection("movie_notes").insert({
       title,
@@ -45,7 +45,8 @@ export const movieNotesControllers = {
     return res.json("Nota deletada")
   },
   index: async (req, res) => { 
-    const { title, tags, user_id } = req.query
+    const { title, tags } = req.query
+    const user_id = req.user.id
 
     let notes
 

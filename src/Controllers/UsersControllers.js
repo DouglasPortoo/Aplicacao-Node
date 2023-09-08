@@ -36,7 +36,7 @@ export const usersControllers = {
   update: async (req, res) => {
 
     const { name, email, password, oldPassword } = req.body
-    const { user_id } = req.params
+    const user_id  = req.user.id
 
     try {
 
@@ -90,7 +90,7 @@ export const usersControllers = {
   },
 
   show: async (req, res) => { 
-    const{user_id} = req.params
+    const user_id  = req.user.id
     try {
       let [userExist] = await connection.select('*')
         .from('users').where({ id: user_id })
@@ -106,10 +106,10 @@ export const usersControllers = {
   },
 
   delete: async (req, res) => { 
-    const { id } = req.params
+    const user_id  = req.user.id
 
    try {
-    await connection('users').where({ id }).delete()
+    await connection('users').where({ id: user_id }).delete()
 
     res.status(201).json('Deletado')
    } catch (err) {
