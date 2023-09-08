@@ -1,9 +1,13 @@
-import Express from "express";
 import { routes } from "./routes/index.js";
+import express from 'express'
+import { UPLOADS_FOLDER } from "./configs/upload.js";
+import cors from "cors"
 
-const app = Express()
+const app = express()
 const PORT = 3333
 
 app.listen(PORT, () => console.log("ON"))
-app.use(Express.json())
+app.use(express.json())
+app.use(cors())
+app.use("/files",express.static(UPLOADS_FOLDER))
 app.use(routes)
