@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export const TMP_FOLDER = path.resolve(__dirname,"..","..","tmp")
-export const UPLOADS_FOLDER = path.resolve(__dirname,'uploads')
+export const UPLOADS_FOLDER = path.resolve(TMP_FOLDER,'uploads')
 
 export const MULTER = {
   storage: multer.diskStorage({

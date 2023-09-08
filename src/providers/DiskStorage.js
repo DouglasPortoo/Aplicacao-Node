@@ -1,11 +1,14 @@
 import path from 'path'
 
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 import fs from 'fs'
 
-import { MULTER, TMP_FOLDER, UPLOADS_FOLDER } from "../configs/upload.js"
+import { TMP_FOLDER, UPLOADS_FOLDER } from "../configs/upload.js"
 
 export const DiskStorage = {
   saveFile: async (file) => {
