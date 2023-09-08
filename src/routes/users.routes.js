@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { usersControllers } from "../Controllers/UsersControllers.js";
 import { notesControllers } from "../Controllers/NotesControllers.js";
-import { tagsControllers } from "../Controllers/TagsControllers.js";
+import { tagsControllers } from "../Controllers/MovieTagsControllers.js";
 
 export const usersRouter = Router()
 export const notesRouter = Router()

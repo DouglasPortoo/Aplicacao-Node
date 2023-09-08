@@ -104,7 +104,6 @@ export const usersControllers = {
       }
     }
   },
-  index: async (req, res) => { },
 
   delete: async (req, res) => { 
     const { id } = req.params
