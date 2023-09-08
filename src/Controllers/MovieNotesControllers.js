@@ -37,6 +37,12 @@ export const movieNotesControllers = {
       tag
     })
   },
-  delete: async (req, res) => { },
+  delete: async (req, res) => { 
+    const {id} = req.params
+
+    await connection("movie_notes").where({id}).delete()
+
+    return res.json("Nota deletada")
+  },
   index: async (req, res) => { },
 }
