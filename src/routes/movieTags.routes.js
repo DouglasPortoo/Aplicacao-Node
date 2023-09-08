@@ -1,11 +1,8 @@
 import { Router } from "express";
 
-import { movieTagsControllers } from "../Controllers/MovieTagsControllers"; 
+import { movieTagsControllers } from "../Controllers/MovieTagsControllers.js"; 
 
 export const movieTagsRouter = Router()
 
-movieTagsRouter.post('/',movieTagsControllers.create)
-movieTagsRouter.put('/:user_id',movieTagsControllers.update)
-movieTagsRouter.delete('/:id',movieTagsControllers.delete)
-movieTagsRouter.get('/:user_id',movieTagsControllers.show)
+// movieTagsRouter.get('/:user_id',movieTagsControllers.index)
 
