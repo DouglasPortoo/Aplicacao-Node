@@ -9,5 +9,6 @@ export const movieTagsControllers = {
     const tags = await connection("movie_tags").where({user_id}).groupBy("name")
 
     res.json(tags)
+    
   },
 }
