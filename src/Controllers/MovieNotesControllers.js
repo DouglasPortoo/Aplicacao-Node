@@ -22,12 +22,21 @@ export const movieNotesControllers = {
 
     await connection("movie_tags").insert(insertTags)
 
-    res.json("Filme cadastrado")
+    return res.json("Filme cadastrado")
 
-    
   },
   
-  show: async (req, res) => { },
+  show: async (req, res) => { 
+    const { id } = req.params
+
+    const note = await connection("movie_notes").where({id}).first()
+    const tag = await connection("movie_tags").where({note_id:id}).orderBy("name")
+
+    return res.json ({
+      ...note,
+      tag
+    })
+  },
   delete: async (req, res) => { },
   index: async (req, res) => { },
 }
