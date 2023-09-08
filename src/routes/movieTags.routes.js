@@ -4,5 +4,5 @@ import { movieTagsControllers } from "../Controllers/MovieTagsControllers.js";
 
 export const movieTagsRouter = Router()
 
-// movieTagsRouter.get('/:user_id',movieTagsControllers.index)
+movieTagsRouter.get('/:user_id',movieTagsControllers.index)
 
