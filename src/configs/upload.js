@@ -1,17 +1,14 @@
-import path from 'path'
+const path = require('path')
 
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import multer from 'multer';
-import crypto from 'crypto'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const multer = require('multer')
+const crypto = require('crypto')
 
-export const TMP_FOLDER = path.resolve(__dirname,"..","..","tmp")
-export const UPLOADS_FOLDER = path.resolve(TMP_FOLDER,'uploads')
 
-export const MULTER = {
+const TMP_FOLDER = path.resolve(__dirname,"..","..","tmp")
+const UPLOADS_FOLDER = path.resolve(TMP_FOLDER,'uploads')
+
+const MULTER = {
   storage: multer.diskStorage({
     destination:TMP_FOLDER,
     filename(req,file,callback){
@@ -21,4 +18,10 @@ export const MULTER = {
       return callback(null,fileName)
     }
   })
+}
+
+module.exports = {
+  TMP_FOLDER,
+  UPLOADS_FOLDER,
+  MULTER
 }

@@ -1,9 +1,11 @@
-import { Router } from "express";
+const { Router } = require('express')
 
-import { movieTagsControllers } from "../Controllers/MovieTagsControllers.js"; 
-import  {ensureAuth}  from "../middleware/ensureAuth.js";
+const movieTagsControllers = require('../Controllers/MovieTagsControllers')
 
-export const movieTagsRouter = Router()
+const ensureAuth = require("../middleware/ensureAuth")
+
+const movieTagsRouter = Router()
 
 movieTagsRouter.get('/',ensureAuth,movieTagsControllers.index)
 
+module.exports = movieTagsRouter

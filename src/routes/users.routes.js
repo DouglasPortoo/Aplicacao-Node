@@ -1,21 +1,23 @@
-import { Router } from "express";
+const { Router } = require('express')
 
-import multer from "multer";
-import { MULTER } from "../configs/upload.js"
+const multer = require('multer')
+const uploadConfig = require('../configs/upload')
 
-import { usersControllers } from "../Controllers/UsersControllers.js";
+const usersControllers = require('../Controllers/UsersControllers')
 
-import  {ensureAuth}  from "../middleware/ensureAuth.js";
-import { useAvatarController } from "../Controllers/UserAvatarController.js";
+const useAvatarController = require('../Controllers/UserAvatarController')
 
-const upload = multer(MULTER)
 
-export const usersRouter = Router()
+const upload = multer(uploadConfig.MULTER)
 
+const ensureAuth = require("../middleware/ensureAuth")
+
+const usersRouter = Router()
+
+usersRouter.get('/',ensureAuth, usersControllers.show)
 usersRouter.post('/', usersControllers.create)
 usersRouter.put('/',ensureAuth, usersControllers.update)
-
-usersRouter.delete('/',ensureAuth, usersControllers.delete)
-usersRouter.get('/',ensureAuth, usersControllers.show)
-
 usersRouter.patch("/avatar",ensureAuth,upload.single('avatar'), useAvatarController.create)
+usersRouter.delete('/',ensureAuth, usersControllers.delete)
+
+module.exports = usersRouter

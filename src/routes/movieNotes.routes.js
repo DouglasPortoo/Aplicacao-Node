@@ -1,10 +1,10 @@
-import { Router } from "express";
+const { Router } = require('express')
 
-import { movieNotesControllers } from "../Controllers/MovieNotesControllers.js";
-import  {ensureAuth}  from "../middleware/ensureAuth.js";
+const movieNotesControllers = require('../Controllers/MovieNotesControllers')
 
-export const movieNotesRouter = Router()
+const ensureAuth = require("../middleware/ensureAuth")
 
+const movieNotesRouter = Router()
 movieNotesRouter.use(ensureAuth)
 
 movieNotesRouter.post('/', movieNotesControllers.create)
@@ -12,3 +12,4 @@ movieNotesRouter.get('/:id', movieNotesControllers.show)
 movieNotesRouter.delete('/:id', movieNotesControllers.delete)
 movieNotesRouter.get('/', movieNotesControllers.index)
 
+module.exports = movieNotesRouter

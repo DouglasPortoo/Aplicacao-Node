@@ -1,3 +1,3 @@
-export const jwt = {
+module.exports = {
   secret: process.env.AUTH_SECRET || "default",
 };

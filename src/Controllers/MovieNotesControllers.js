@@ -1,11 +1,11 @@
-import { connection } from "../database/knex/index.js";
+const knex = require("../database/knex")
 
-export const movieNotesControllers = {
+const movieNotesControllers = {
   create: async (req, res) => {
     const { title, description, rating, tags } = req.body
     const user_id = req.user.id
 
-    const [note_id] = await connection("movie_notes").insert({
+    const [note_id] = await knex("movie_notes").insert({
       title,
       description,
       rating,
@@ -20,7 +20,7 @@ export const movieNotesControllers = {
       }
     })
 
-    await connection("movie_tags").insert(insertTags)
+    await knex("movie_tags").insert(insertTags)
 
     return res.json("Filme cadastrado")
 
@@ -29,8 +29,8 @@ export const movieNotesControllers = {
   show: async (req, res) => {
     const { id } = req.params
 
-    const note = await connection("movie_notes").where({ id }).first()
-    const tag = await connection("movie_tags").where({ note_id: id }).orderBy("name")
+    const note = await knex("movie_notes").where({ id }).first()
+    const tag = await knex("movie_tags").where({ note_id: id }).orderBy("name")
 
     return res.json({
       ...note,
@@ -40,7 +40,7 @@ export const movieNotesControllers = {
   delete: async (req, res) => {
     const { id } = req.params
 
-    await connection("movie_notes").where({ id }).delete()
+    await knex("movie_notes").where({ id }).delete()
 
     return res.json("Nota deletada")
   },
@@ -53,7 +53,7 @@ export const movieNotesControllers = {
     // if (tags) {
     //   const filterTags = tags.split(',').map(tag => tag.trim())
 
-    //   notes = await connection("movie_tags")
+    //   notes = await knex("movie_tags")
     //     .select([
     //       "movie_notes.id",
     //       "movie_notes.title",
@@ -68,13 +68,13 @@ export const movieNotesControllers = {
 
     // } else {}
 
-    const notes = await connection("movie_notes")
+    const notes = await knex("movie_notes")
       .where({ user_id })
       .whereLike("title", `%${title}%`)
       .orderBy("created_at")
 
 
-    const userTags = await connection("movie_tags").where({ user_id })
+    const userTags = await knex("movie_tags").where({ user_id })
     const notesWhithTags = notes.map(note => {
       const noteTags = userTags.filter(tag => tag.note_id === note.id)
 
@@ -87,3 +87,5 @@ export const movieNotesControllers = {
     return res.json(notesWhithTags)
   }
 }
+
+module.exports = movieNotesControllers

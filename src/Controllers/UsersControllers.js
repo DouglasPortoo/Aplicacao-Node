@@ -1,14 +1,14 @@
-import { connection } from "../database/knex/index.js";
-import pkg from 'bcryptjs';
-const { hash, compare } = pkg;
+const knex = require("../database/knex")
+const { hash, compare } = require('bcryptjs')
 
-export const usersControllers = {
+
+const usersControllers = {
   create: async (req, res) => {
     const { name, email, password } = req.body
 
     try {
 
-      let [checkEmailExists] = await connection.select('email')
+      let [checkEmailExists] = await knex.select('email')
         .fromRaw('(select * from "users" where "email" = (?))', [email])
 
       if (checkEmailExists && checkEmailExists.email == email) {
@@ -17,7 +17,7 @@ export const usersControllers = {
 
       const hashPassword = await hash(password, 8)
 
-      await connection("users").insert({
+      await knex("users").insert({
         name,
         email,
         password: hashPassword
@@ -36,18 +36,18 @@ export const usersControllers = {
   update: async (req, res) => {
 
     const { name, email, password, oldPassword } = req.body
-    const user_id  = req.user.id
+    const user_id = req.user.id
 
     try {
 
-      let [userExist] = await connection.select('*')
+      let [userExist] = await knex.select('*')
         .from('users').where({ id: user_id })
 
       if (!userExist) {
         throw new Error("usuario inexistente")
       }
 
-      const [userWithUpdatedEmail] = await connection.select('*')
+      const [userWithUpdatedEmail] = await knex.select('*')
         .from('users').where({ email })
 
 
@@ -73,11 +73,11 @@ export const usersControllers = {
 
       const hashPassword = await hash(password, 8)
 
-      await connection('users').where({ id: user_id }).update("name", name ?? userExist.name)
+      await knex('users').where({ id: user_id }).update("name", name ?? userExist.name)
 
-      await connection('users').where({ id: user_id }).update("email",email ?? userExist.email)
+      await knex('users').where({ id: user_id }).update("email", email ?? userExist.email)
 
-      await connection('users').where({ id: user_id }).update("password",hashPassword)
+      await knex('users').where({ id: user_id }).update("password", hashPassword)
 
       res.status(201).json('Atualizado')
 
@@ -89,13 +89,13 @@ export const usersControllers = {
 
   },
 
-  show: async (req, res) => { 
-    const user_id  = req.user.id
+  show: async (req, res) => {
+    const user_id = req.user.id
     try {
-      let [userExist] = await connection.select('*')
+      let [userExist] = await knex.select('*')
         .from('users').where({ id: user_id })
 
-        
+
       res.status(201).json(userExist)
 
     } catch (err) {
@@ -105,17 +105,19 @@ export const usersControllers = {
     }
   },
 
-  delete: async (req, res) => { 
-    const user_id  = req.user.id
+  delete: async (req, res) => {
+    const user_id = req.user.id
 
-   try {
-    await connection('users').where({ id: user_id }).delete()
+    try {
+      await knex('users').where({ id: user_id }).delete()
 
-    res.status(201).json('Deletado')
-   } catch (err) {
-    if (err instanceof Error) {
-      return res.status(400).json({ message: err.message })
+      res.status(201).json('Deletado')
+    } catch (err) {
+      if (err instanceof Error) {
+        return res.status(400).json({ message: err.message })
+      }
     }
-   }
   },
 }
+
+module.exports = usersControllers

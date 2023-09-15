@@ -1,14 +1,14 @@
-import { connection } from "../database/knex/index.js";
-import { DiskStorage } from "../providers/DiskStorage.js";
+const knex = require("../database/knex")
+const DiskStorage = require("../providers/DiskStorage")
 
-export const useAvatarController = {
+const useAvatarController = {
 
   create: async (req, res) => {
     const user_id = req.user.id
     const avatarfilename = req.file.filename
 
     try {
-      const [user] = await connection("users").where({ id: user_id })
+      const [user] = await knex("users").where({ id: user_id })
 
       if (!user) {
         throw new Error('apenas usuarios cadastrados podem mudar o avatar')
@@ -22,7 +22,7 @@ export const useAvatarController = {
 
       user.avatar = filename
 
-      await connection("users").where({ id: user_id }).update("avatar", user.avatar)
+      await knex("users").where({ id: user_id }).update("avatar", user.avatar)
 
       return res.json([user])
 
@@ -32,10 +32,9 @@ export const useAvatarController = {
       }
     }
 
-
-
-
     res.json(avatarfilename)
 
   },
 }
+
+module.exports = useAvatarController

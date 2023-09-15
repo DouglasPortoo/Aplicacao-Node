@@ -1,8 +1,7 @@
-import pkg from 'jsonwebtoken';
-const { verify } = pkg;
-import { jwt } from "../configs/auth.js"
+const {verify} = require("jsonwebtoken")
+const AuthConfig = require("../configs/auth")
 
-export function ensureAuth(req, res, next) {
+function ensureAuth(req, res, next) {
   const authHeader = req.headers.authorization
 
   if (!authHeader) {
@@ -12,7 +11,7 @@ export function ensureAuth(req, res, next) {
   const [, token] = authHeader.split(" ")
 
   try {
-    const { sub: user_id } = verify(token, jwt.secret)
+    const { sub: user_id } = verify(token, AuthConfig.secret)
 
     req.user = {
       id: Number(user_id)
@@ -26,3 +25,5 @@ export function ensureAuth(req, res, next) {
     }
   }
 }
+
+module.exports = ensureAuth

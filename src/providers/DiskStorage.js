@@ -1,26 +1,18 @@
-import path from 'path'
+const path = require ('path')
+const fs = require('fs')
+const uploadConfig = require("../configs/upload")
 
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-import fs from 'fs'
-
-import { TMP_FOLDER, UPLOADS_FOLDER } from "../configs/upload.js"
-
-export const DiskStorage = {
+const DiskStorage = {
   saveFile: async (file) => {
     await fs.promises.rename(
-      path.resolve(TMP_FOLDER, file),
-      path.resolve(UPLOADS_FOLDER, file)
+      path.resolve(uploadConfig.TMP_FOLDER, file),
+      path.resolve(uploadConfig.UPLOADS_FOLDER, file)
     )
     return file
   },
 
   deleteFile: async (file) => {
-    const filePath = path.resolve(UPLOADS_FOLDER, file)
+    const filePath = path.resolve(uploadConfig.UPLOADS_FOLDER, file)
 
     try {
       await fs.promises.stat(filePath)
@@ -31,3 +23,5 @@ export const DiskStorage = {
     await fs.promises.unlink(filePath)
   }
 }
+
+module.exports = DiskStorage

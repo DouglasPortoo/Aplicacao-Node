@@ -1,18 +1,16 @@
-import pkg from 'bcryptjs';
-const { compare } = pkg;
-import { connection } from "../database/knex/index.js"
+const { compare } = require("bcryptjs")
+const knex = require("../database/knex")
 
-import { jwt } from "../configs/auth.js"
-import pkg2 from 'jsonwebtoken';
-const { sign } = pkg2;
+const AuthConfig = require("../configs/auth")
+const { sign } = require("jsonwebtoken")
 
-export const sessionController = {
+const sessionController = {
   create: async (req, res) => {
     const { email, password } = req.body
 
     try {
-      const user = await connection("users").where({ email }).first()
-     
+      const user = await knex("users").where({ email }).first()
+
 
       if (!user) {
         throw new Error("email ou senha invalida")
@@ -26,16 +24,15 @@ export const sessionController = {
         }
 
       }
+      const { secret } = AuthConfig
 
-      const { secret } = jwt
-
-      const token = sign({}, secret,{
+      const token = sign({}, secret, {
         subject: String(user.id),
-        expiresIn:"1d"
+        expiresIn: "1d"
       })
 
 
-      return res.json({user,token})
+      return res.json({ user, token })
 
     } catch (error) {
       if (error instanceof Error) {
@@ -44,3 +41,5 @@ export const sessionController = {
     }
   }
 }
+
+module.exports = sessionController
