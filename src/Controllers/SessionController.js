@@ -10,7 +10,7 @@ const sessionController = {
 
     try {
       const user = await knex("users").where({ email }).first()
-
+      
 
       if (!user) {
         throw new Error("email ou senha invalida")
@@ -18,6 +18,7 @@ const sessionController = {
 
       if (password) {
         const comparePassword = await compare(password, user.password)
+     
 
         if (!comparePassword) {
           throw new Error("email ou senha invalida")

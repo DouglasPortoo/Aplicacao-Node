@@ -63,21 +63,25 @@ const usersControllers = {
         throw new AppError("Você precisa informar a senha antiga para definir a nova senha")
       }
 
+      let hashPassword
       if (password && oldPassword) {
         const checkPassoword = await compare(oldPassword, user.password)
 
         if (!checkPassoword) {
           throw new Error("senha antiga incorreta")
+        }else{
+          hashPassword = await hash(password, 8)
+        user.password = hashPassword
         }
+        
       }
 
-      const hashPassword = await hash(password, 8)
 
       await knex('users').where({ id: user_id }).update("name", name ?? user.name)
 
       await knex('users').where({ id: user_id }).update("email", email ?? user.email)
 
-      await knex('users').where({ id: user_id }).update("password", hashPassword)
+      await knex('users').where({ id: user_id }).update("password",  user.password)
 
       res.status(201).json('Atualizado')
 
