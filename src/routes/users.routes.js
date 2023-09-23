@@ -14,10 +14,10 @@ const ensureAuth = require("../middleware/ensureAuth")
 
 const usersRouter = Router()
 
-usersRouter.get('/',ensureAuth, usersControllers.show)
+usersRouter.get('/:id',ensureAuth, usersControllers.show)
 usersRouter.post('/', usersControllers.create)
 usersRouter.put('/',ensureAuth, usersControllers.update)
-usersRouter.patch("/avatar",ensureAuth,upload.single('avatar'), useAvatarController.create)
+usersRouter.patch("/avatar",ensureAuth,upload.single('avatar'), useAvatarController.update)
 usersRouter.delete('/',ensureAuth, usersControllers.delete)
 
 module.exports = usersRouter

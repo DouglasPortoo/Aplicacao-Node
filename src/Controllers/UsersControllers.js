@@ -40,10 +40,11 @@ const usersControllers = {
 
     try {
 
-      let [userExist] = await knex.select('*')
+      let [user] = await knex.select('*')
         .from('users').where({ id: user_id })
+        
 
-      if (!userExist) {
+      if (!user) {
         throw new Error("usuario inexistente")
       }
 
@@ -51,20 +52,19 @@ const usersControllers = {
         .from('users').where({ email })
 
 
-      if (userWithUpdatedEmail && userWithUpdatedEmail.id !== userExist.id) {
+      if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
         throw new Error("Este e-mail já está em uso.")
       }
 
-      if (!oldPassword) {
-        throw new Error("informar senha antiga")
-      }
+      user.name = name ?? user.name
+      user.email = email ?? user.email
 
-      if (!password) {
-        throw new Error("informar senha nova")
+      if (password && !oldPassword) {
+        throw new AppError("Você precisa informar a senha antiga para definir a nova senha")
       }
 
       if (password && oldPassword) {
-        const checkPassoword = await compare(oldPassword, userExist.password)
+        const checkPassoword = await compare(oldPassword, user.password)
 
         if (!checkPassoword) {
           throw new Error("senha antiga incorreta")
@@ -73,9 +73,9 @@ const usersControllers = {
 
       const hashPassword = await hash(password, 8)
 
-      await knex('users').where({ id: user_id }).update("name", name ?? userExist.name)
+      await knex('users').where({ id: user_id }).update("name", name ?? user.name)
 
-      await knex('users').where({ id: user_id }).update("email", email ?? userExist.email)
+      await knex('users').where({ id: user_id }).update("email", email ?? user.email)
 
       await knex('users').where({ id: user_id }).update("password", hashPassword)
 
@@ -92,11 +92,11 @@ const usersControllers = {
   show: async (req, res) => {
     const user_id = req.user.id
     try {
-      let [userExist] = await knex.select('*')
+      let [user] = await knex.select('*')
         .from('users').where({ id: user_id })
 
 
-      res.status(201).json(userExist)
+      res.status(201).json(user)
 
     } catch (err) {
       if (err instanceof Error) {

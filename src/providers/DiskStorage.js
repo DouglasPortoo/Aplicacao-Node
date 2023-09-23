@@ -17,7 +17,7 @@ const DiskStorage = {
     try {
       await fs.promises.stat(filePath)
 
-    } catch (error) {
+    } catch {
       return
     }
     await fs.promises.unlink(filePath)
