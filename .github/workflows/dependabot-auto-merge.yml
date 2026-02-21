@@ -2,11 +2,15 @@ name: Dependabot Auto Merge
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   automerge:
-    if: github.actor == 'dependabot[bot]' &&
-        contains(github.event.pull_request.labels.*.name, 'security')
+    if: ${{ github.actor == 'dependabot[bot]' && contains(github.event.pull_request.labels.*.name, 'security') }}
     runs-on: ubuntu-latest
     steps:
       - run: gh pr merge --auto --merge "$PR_URL"
